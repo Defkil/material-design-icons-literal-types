@@ -3,9 +3,9 @@ const https = require('https')
 
 /**
  * @param {Object} options - Options
- * @param {string} options.url
- * @param {string} options.outputTypeName
- * @param {string} options.outputFile
+ * @param {string} options.url - URL to download
+ * @param {string} options.outputTypeName - Name of the output type
+ * @param {string} options.outputFile - Output file path
  * @return {Promise<void>}
  */
 module.exports = async function generateIconTypeFile (options) {
@@ -15,7 +15,7 @@ module.exports = async function generateIconTypeFile (options) {
 
 /**
  * Download and process the content of the given URL
- * @param url - URL to download
+ * @param {string} url - URL to download
  * @return {Promise<string>} - Processed content
  */
 async function downloadAndProcess (url) {
