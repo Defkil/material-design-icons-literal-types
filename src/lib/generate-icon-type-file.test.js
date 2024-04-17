@@ -5,6 +5,7 @@ const generateIconTypeFile = require('./generate-icon-type-file')
 describe('generateIconTypeFile', () => {
   afterEach(() => {
     jest.restoreAllMocks()
+    fs.unlink('icons.ts').catch(() => {})
   })
 
   it('should generate the icon type file correctly', async () => {
