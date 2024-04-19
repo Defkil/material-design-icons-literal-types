@@ -13,7 +13,7 @@
   "author": "Oliver Grüttner",
   "license": "ISC",
   "config": {
-    "lastGeneratedTimestamp": 0
+    "lastGenerated": "2010-04-19T18:26:01.258Z"
   },
   "devDependencies": {
     "jest": "^29.7.0",
