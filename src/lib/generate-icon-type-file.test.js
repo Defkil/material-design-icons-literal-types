@@ -12,7 +12,7 @@ describe('generateIconTypeFile', () => {
     const options = {
       url: 'https://example.com/icons',
       outputTypeName: 'IconType',
-      outputFile: 'icons.ts',
+      outputFile: 'icons.ts'
     }
 
     const httpsGetSpy = jest.spyOn(https, 'get').mockImplementation((url, callback) => {
@@ -23,7 +23,7 @@ describe('generateIconTypeFile', () => {
           } else if (event === 'end') {
             handler()
           }
-        }),
+        })
       }
       callback(response)
       return {
@@ -31,7 +31,7 @@ describe('generateIconTypeFile', () => {
           if (event === 'error') {
             handler(new Error('Download error'))
           }
-        }),
+        })
       }
     })
 
@@ -53,12 +53,12 @@ describe('generateIconTypeFile', () => {
     const options = {
       url: 'https://example.com/icons',
       outputTypeName: 'IconType',
-      outputFile: 'icons.ts',
+      outputFile: 'icons.ts'
     }
 
     jest.spyOn(https, 'get').mockImplementation((url, callback) => {
       const response = {
-        on: jest.fn(),
+        on: jest.fn()
       }
       callback(response)
       return {
@@ -66,7 +66,7 @@ describe('generateIconTypeFile', () => {
           if (event === 'error') {
             handler(new Error('Download error'))
           }
-        }),
+        })
       }
     })
 
