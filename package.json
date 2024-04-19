@@ -15,6 +15,11 @@
   "config": {
     "lastGenerated": "2010-04-19T18:26:01.258Z"
   },
+  "standard": {
+    "env": [
+      "jest"
+    ]
+  },
   "devDependencies": {
     "jest": "^29.7.0",
     "standard": "^17.1.0"
