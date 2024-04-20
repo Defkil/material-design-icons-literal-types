@@ -31,7 +31,7 @@ describe('githubGetLastModifiedDate', () => {
     mockHttpsGet(commitsData)
 
     const lastModifiedDate = await githubGetLastModifiedDate('path/to/file')
-    expect(lastModifiedDate).toEqual('2023-01-01T00:00:00Z')
+    expect(lastModifiedDate).toEqual(new Date('2023-01-01T00:00:00Z'))
   })
 
   test('should throw an error when the API returns a non-200 status code', async () => {

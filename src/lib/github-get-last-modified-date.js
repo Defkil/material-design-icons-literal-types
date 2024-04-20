@@ -3,7 +3,7 @@ const https = require('https')
 /**
  * Get the last modified date of a file in the Google Material Design Icons repository on GitHub.
  * @param {string} filePath - The path to the file in the repository.
- * @return {Promise<string>} - The last modified date of the file.
+ * @return {Promise<Date>} - The last modified date of the file.
  */
 module.exports = async function githubGetLastModifiedDate (filePath) {
   const options = {
@@ -36,7 +36,7 @@ module.exports = async function githubGetLastModifiedDate (filePath) {
         }
 
         const lastModifiedDate = commits[0].commit.committer.date
-        resolve(lastModifiedDate)
+        resolve(new Date(lastModifiedDate))
       })
     })
 
