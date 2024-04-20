@@ -19,7 +19,7 @@ describe('packageConfigLastGenerated', () => {
 
   test('should correctly get the last generated timestamp', () => {
     const timestamp = packageConfigLastGeneratedGet()
-    expect(timestamp).toBe('2021-01-01T00:00:00.000Z')
+    expect(timestamp).toStrictEqual(new Date('2021-01-01T00:00:00.000Z'))
     expect(fs.readFileSync).toHaveBeenCalledWith(expect.stringContaining('package.json'), 'utf8')
   })
 

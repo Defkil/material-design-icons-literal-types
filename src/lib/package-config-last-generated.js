@@ -5,7 +5,7 @@ const packageJsonPath = path.join(__dirname, '../../package.json')
 
 /**
  * Get the last generated timestamp from the package.json file
- * @return {string} - The last generated time as an ISO string
+ * @return {Date} - The last generated timestamp
  */
 function packageConfigLastGeneratedGet () {
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
@@ -15,7 +15,7 @@ function packageConfigLastGeneratedGet () {
   if (!packageJson.config.lastGenerated) {
     throw new Error('No lastGenerated property in package.json config')
   }
-  return packageJson.config.lastGenerated
+  return new Date(packageJson.config.lastGenerated)
 }
 
 /**
