@@ -1,8 +1,8 @@
 const fs = require('fs').promises
 const https = require('https')
-const generateIconTypeFile = require('./generate-icon-type-file')
+const generateTypeFile = require('./generate-type-file')
 
-describe('generateIconTypeFile', () => {
+describe('generateTypeFile', () => {
   afterEach(() => {
     jest.restoreAllMocks()
     fs.unlink('icons.ts').catch(() => {})
@@ -33,7 +33,7 @@ describe('generateIconTypeFile', () => {
 
     const writeFileSpy = jest.spyOn(fs, 'writeFile').mockResolvedValue()
 
-    await generateIconTypeFile(options)
+    await generateTypeFile(options)
 
     expect(writeFileSpy).toHaveBeenCalledWith(
       'icons.ts',
@@ -62,6 +62,6 @@ describe('generateIconTypeFile', () => {
       }
     })
 
-    await expect(generateIconTypeFile(options)).rejects.toThrow('Download error')
+    await expect(generateTypeFile(options)).rejects.toThrow('Download error')
   })
 })

@@ -8,7 +8,7 @@ const https = require('https')
  * @param {string} options.outputFile - Output file path
  * @return {Promise<void>}
  */
-module.exports = async function generateIconTypeFile (options) {
+module.exports = async function generateTypeFile (options) {
   const typeContent = await downloadAndProcess(options.githubPath)
   await fs.writeFile(options.outputFile, `export type ${options.outputTypeName} =\n${typeContent};`)
 }
