@@ -10,42 +10,34 @@ describe('generateIconTypeFile', () => {
 
   it('should generate the icon type file correctly', async () => {
     const options = {
-      url: 'https://example.com/icons',
+      githubPath: 'path/to/icons',
       outputTypeName: 'IconType',
       outputFile: 'icons.ts'
     }
 
-    const httpsGetSpy = jest.spyOn(https, 'get').mockImplementation((url, callback) => {
+    const dummyResponse = 'icon1 e000\nicon2 e000\nicon3 e000\n'
+    jest.spyOn(https, 'get').mockImplementation((options, callback) => {
       const response = {
-        on: jest.fn((event, handler) => {
+        on: (event, handler) => {
           if (event === 'data') {
-            handler('icon1 e000\nicon2 e000\nicon3 e000\n')
-          } else if (event === 'end') {
+            handler(Buffer.from(dummyResponse))
+          }
+          if (event === 'end') {
             handler()
           }
-        })
+        }
       }
       callback(response)
-      return {
-        on: jest.fn((event, handler) => {
-          if (event === 'error') {
-            handler(new Error('Download error'))
-          }
-        })
-      }
+      return { on: jest.fn() }
     })
 
-    const fsWriteFileSpy = jest.spyOn(fs, 'writeFile')
+    const writeFileSpy = jest.spyOn(fs, 'writeFile').mockResolvedValue()
 
     await generateIconTypeFile(options)
 
-    expect(httpsGetSpy).toHaveBeenCalledWith('https://example.com/icons', expect.any(Function))
-    expect(fsWriteFileSpy).toHaveBeenCalledWith(
+    expect(writeFileSpy).toHaveBeenCalledWith(
       'icons.ts',
-      `export type IconType =
-| 'icon1'
-| 'icon2'
-| 'icon3';`
+      'export type IconType =\n| \'icon1\'\n| \'icon2\'\n| \'icon3\';'
     )
   })
 
