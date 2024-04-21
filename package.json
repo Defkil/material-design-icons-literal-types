@@ -10,7 +10,8 @@
     "test": "jest"
   },
   "keywords": [],
-  "author": "Oliver Grüttner",
+  "author": "Oliver Grüttner <dev@olivergruettner.de> (https://olis.tech)",
+  "repository": "github:Defkil/material-design-icons-literal-types",
   "license": "ISC",
   "config": {
     "lastGenerated": "2010-04-19T18:26:01.258Z"
