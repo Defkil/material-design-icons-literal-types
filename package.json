@@ -8,7 +8,15 @@
     "lint:fix": "standard --fix",
     "test": "jest"
   },
-  "keywords": [],
+  "keywords": [
+    "material-design",
+    "typescript",
+    "literal-types",
+    "type-safety",
+    "google-icons",
+    "material-symbols",
+    "material-icons"
+  ],
   "author": "Oliver Grüttner <dev@olivergruettner.de> (https://olis.tech)",
   "repository": "github:Defkil/material-design-icons-literal-types",
   "license": "ISC",
