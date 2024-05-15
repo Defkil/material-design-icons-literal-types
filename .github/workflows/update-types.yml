@@ -15,8 +15,16 @@ jobs:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
+        with:
+          registry-url: 'https://registry.npmjs.org'
+      - name: Get current package version
+        id: current_version
+        run: echo "current_version=$(npm pkg get version | cut -d '"' -f2)" >> $GITHUB_OUTPUT
       - name: Update types
         run: npm run start
+      - name: Get updated package version
+        id: updated_version
+        run: echo "updated_version=$(npm pkg get version | cut -d '"' -f2)" >> $GITHUB_OUTPUT
       - name: Commit changes
         uses: EndBug/add-and-commit@v9
         with:
@@ -26,3 +34,8 @@ jobs:
           author_name: Defkil
           author_email: dev@olivergruettner.de
           message: 'bot: Update types and package version'
+      - name: Publish to npm
+        if: steps.current_version.outputs.current_version != steps.updated_version.outputs.updated_version
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public
