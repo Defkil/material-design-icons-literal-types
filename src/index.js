@@ -1,6 +1,6 @@
 const generateTypeFile = require('./lib/generate-type-file')
 const githubGetLastModifiedDate = require('./lib/github-get-last-modified-date')
-const { packageConfigGetLastGenerated, packageConfigSetAndIncrementVersion } = require('./lib/package-config')
+const { packageConfigGetLastGenerated, packageConfigSetTimeAndIncrementVersion } = require('./lib/package-config')
 const readDataSource = require('./lib/load-data-source')
 const fs = require('fs')
 
@@ -27,7 +27,7 @@ async function main () {
     modified = true
   }
   if (modified) {
-    packageConfigSetAndIncrementVersion(new Date())
+    packageConfigSetTimeAndIncrementVersion(new Date())
   }
 }
 

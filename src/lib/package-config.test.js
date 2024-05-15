@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { packageConfigGetLastGenerated, packageConfigSetAndIncrementVersion } = require('./package-config')
+const { packageConfigGetLastGenerated, packageConfigSetTimeAndIncrementVersion } = require('./package-config')
 jest.mock('fs')
 
 describe('packageConfig', () => {
@@ -36,7 +36,7 @@ describe('packageConfig', () => {
 
   test('should correctly set the last generated timestamp', () => {
     const newTime = new Date(2022, 0, 1)
-    packageConfigSetAndIncrementVersion(newTime)
+    packageConfigSetTimeAndIncrementVersion(newTime)
     expect(fs.writeFileSync).toHaveBeenCalledWith(
       expect.stringContaining('package.json'),
       expect.stringContaining(newTime.toISOString()),
@@ -50,7 +50,7 @@ describe('packageConfig', () => {
       version: '1.0.0'
     }
     fs.readFileSync.mockReturnValue(JSON.stringify(examplePackageJson))
-    packageConfigSetAndIncrementVersion(newTime)
+    packageConfigSetTimeAndIncrementVersion(newTime)
     expect(fs.writeFileSync).toHaveBeenCalledWith(
       expect.stringContaining('package.json'),
       expect.stringContaining('1.0.1'),

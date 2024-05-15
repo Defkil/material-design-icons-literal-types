@@ -19,10 +19,10 @@ function packageConfigGetLastGenerated () {
 }
 
 /**
- * Set the last generated timestamp in the package.json file
+ * Set given timestamp in the package.json file and increment the patch version
  * @param {Date} time - The time to set as the last generated timestamp
  */
-function packageConfigSetAndIncrementVersion (time) {
+function packageConfigSetTimeAndIncrementVersion (time) {
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'))
   packageJson.config = packageJson.config || {}
   packageJson.config.lastGenerated = time.toISOString()
@@ -33,5 +33,5 @@ function packageConfigSetAndIncrementVersion (time) {
 }
 
 module.exports = {
-  packageConfigGetLastGenerated, packageConfigSetAndIncrementVersion
+  packageConfigGetLastGenerated, packageConfigSetTimeAndIncrementVersion
 }
