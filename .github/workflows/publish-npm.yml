@@ -1,7 +1,9 @@
 name: Publish types to npm
 on:
   push:
+    branches: [ 'main' ]
     paths:
+      - 'dist/'
       - 'dist/**'
 jobs:
   build:
