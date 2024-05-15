@@ -4,6 +4,7 @@ on:
     - cron: '0 0 * * 1'
     - cron: '0 0 * * 3'
     - cron: '0 0 * * 5'
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-22.04
