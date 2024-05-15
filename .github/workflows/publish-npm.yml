@@ -3,8 +3,7 @@ on:
   push:
     branches: [ 'main' ]
     paths:
-      - 'dist/'
-      - 'dist/**'
+      - dist
 jobs:
   build:
     runs-on: ubuntu-latest
