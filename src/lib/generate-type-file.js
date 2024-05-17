@@ -47,7 +47,6 @@ async function downloadAndProcess (githubPath) {
 }
 
 /**
- *
  * @param {string[]} names - Material Design Source Names
  * @return {string[]} - Formatted names as literal types
  */
