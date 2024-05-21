@@ -1,0 +1,30 @@
+name: Publish to npm
+on:
+  workflow_dispatch:
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [ 20 ]
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          registry-url: 'https://registry.npmjs.org'
+      - name: Check if dist folder is empty
+        run: |
+          if [ -z "$(ls -A dist)" ]; then
+            echo "The dist folder is empty. Publishing is not possible."
+            echo "For publishing changes related to types, please use the GitHub workflow action 'Update types'."
+            echo "This publish action is intended for changes not related to types. Please ensure the dist folder is not empty before running this action."
+            exit 1
+          fi
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public
