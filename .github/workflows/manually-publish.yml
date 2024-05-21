@@ -1,4 +1,4 @@
-name: Publish to npm
+name: Manually publish to npm
 on:
   workflow_dispatch:
 jobs:
