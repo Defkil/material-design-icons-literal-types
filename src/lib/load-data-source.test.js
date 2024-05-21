@@ -3,8 +3,8 @@ const readDataSource = require('./load-data-source')
 
 jest.mock('fs', () => ({
   promises: {
-    readFile: jest.fn(),
-  },
+    readFile: jest.fn()
+  }
 }))
 
 describe('readDataSource', () => {
