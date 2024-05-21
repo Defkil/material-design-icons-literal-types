@@ -6,20 +6,34 @@ It allows you to use the icon names with type safety in your TypeScript projects
 
 ## Installation
 
-Install the package using npm:
+> Install the package
 
 ```bash
-npm install material-design-icons-literal-types
+npm install -D material-design-icons-literal-types
+```
+
+```bash
+pnpm add -D material-design-icons-literal-types
+```
+
+```bash
+yarn add -D material-design-icons-literal-types
 ```
 
 ## Usage
 
-Import the desired icon type from the package:
+> Import the desired icon type from the package
 
 ```typescript
 import {MaterialSymbols} from 'material-design-icons-literal-types'
 
-const myIcon: MaterialSymbols = 'home'
+const mySymbol: MaterialSymbols = 'home'
+```
+
+```typescript
+import {MaterialIcons} from 'material-design-icons-literal-types'
+
+const myIcon: MaterialIcons = 'home'
 ```
 
 The package provides the following literal types:
