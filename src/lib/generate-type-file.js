@@ -27,17 +27,15 @@ async function downloadAndProcess (githubPath) {
     }
   }
   return new Promise((resolve, reject) => {
-    let formattedNames = []
+    let data = ''
 
     https.get(options, (response) => {
       response.on('data', (chunk) => {
-        const lines = chunk.toString().split('\n')
-        const chunkNames = lines.map((line) => line.split(' ')[0])
-        const chunkFormattedNames = formatNamesToLiteralTypes(chunkNames)
-        formattedNames = formattedNames.concat(chunkFormattedNames)
+        data += chunk
       })
 
       response.on('end', () => {
+        const formattedNames = formatNamesToLiteralTypes(data.split('\n'))
         resolve(formattedNames.join('\n'))
       })
     }).on('error', (error) => {
@@ -47,9 +45,14 @@ async function downloadAndProcess (githubPath) {
 }
 
 /**
- * @param {string[]} names - Material Design Source Names
+ * @param {string[]} lines - Lines from the downloaded file
  * @return {string[]} - Formatted names as literal types
  */
-function formatNamesToLiteralTypes (names) {
-  return names.filter(name => name.trim() !== '').map((name) => `| '${name}'`)
+function formatNamesToLiteralTypes (lines) {
+  return lines
+    .filter(line => line.trim() !== '')
+    .map((line) => {
+      const iconName = line.split(/\s+/)[0].trim()
+      return `| '${iconName}'`
+    })
 }
