@@ -9,16 +9,16 @@ const https = require('https')
  * @return {Promise<void>}
  */
 module.exports = async function generateTypeFile (options) {
-  const typeContent = await downloadAndProcess(options.githubPath)
-  await fs.writeFile(options.outputFile, `export type ${options.outputTypeName} =\n${typeContent};`)
+  const sourceContent = await downloadContent(options.githubPath)
+  const processedContent = processContent(sourceContent)
+  const typeContent = generateTypeContent(options.outputTypeName, processedContent)
+
+  validateGeneratedContent(sourceContent, typeContent)
+
+  await writeTypeFile(options.outputFile, typeContent)
 }
 
-/**
- * Download and process the content of the given URL
- * @param {string} githubPath - path to download
- * @return {Promise<string>} - Processed content
- */
-async function downloadAndProcess (githubPath) {
+async function downloadContent (githubPath) {
   const options = {
     hostname: 'raw.githubusercontent.com',
     path: '/google/material-design-icons/master/' + githubPath,
@@ -26,33 +26,40 @@ async function downloadAndProcess (githubPath) {
       'User-Agent': 'Node.js'
     }
   }
+
   return new Promise((resolve, reject) => {
     let data = ''
-
     https.get(options, (response) => {
-      response.on('data', (chunk) => {
-        data += chunk
-      })
-
-      response.on('end', () => {
-        const formattedNames = formatNamesToLiteralTypes(data.split('\n'))
-        resolve(formattedNames.join('\n'))
-      })
-    }).on('error', (error) => {
-      reject(error)
-    })
+      response.on('data', (chunk) => { data += chunk })
+      response.on('end', () => resolve(data))
+    }).on('error', reject)
   })
 }
 
-/**
- * @param {string[]} lines - Lines from the downloaded file
- * @return {string[]} - Formatted names as literal types
- */
-function formatNamesToLiteralTypes (lines) {
-  return lines
+function processContent (sourceContent) {
+  return sourceContent
+    .split('\n')
     .filter(line => line.trim() !== '')
-    .map((line) => {
+    .map(line => {
       const iconName = line.split(/\s+/)[0].trim()
       return `| '${iconName}'`
     })
+    .join('\n')
+}
+
+function generateTypeContent (outputTypeName, processedContent) {
+  return `export type ${outputTypeName} =\n${processedContent};`
+}
+
+function validateGeneratedContent (sourceContent, typeContent) {
+  const sourceLines = sourceContent.split('\n').filter(line => line.trim() !== '').length
+  const generatedLines = typeContent.split('\n').length
+
+  if (generatedLines !== sourceLines + 1) {
+    throw new Error(`Generated file has ${generatedLines} lines, expected ${sourceLines + 1} lines`)
+  }
+}
+
+async function writeTypeFile (outputFile, typeContent) {
+  await fs.writeFile(outputFile, typeContent)
 }
