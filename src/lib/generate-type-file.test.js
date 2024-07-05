@@ -88,7 +88,7 @@ describe('generateTypeFile', () => {
       return { on: jest.fn() }
     })
 
-    String.prototype.split = jest.fn().mockReturnValue(['line1', 'line2', 'line3'])
+    String.prototype.split = jest.fn().mockReturnValue(['line1', 'line2', 'line3']) // eslint-disable-line
 
     await expect(generateTypeFile(options)).rejects.toThrow('Generated file has 3 lines, expected 4 lines')
     jest.restoreAllMocks()
