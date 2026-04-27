@@ -1,6 +1,6 @@
 {
   "name": "material-design-icons-literal-types",
-  "version": "1.0.47",
+  "version": "1.0.48",
   "description": "",
   "scripts": {
     "start": "node src/index.js",
@@ -21,7 +21,7 @@
   "repository": "github:Defkil/material-design-icons-literal-types",
   "license": "ISC",
   "config": {
-    "lastGenerated": "2026-04-20T00:39:45.963Z"
+    "lastGenerated": "2026-04-27T00:42:39.050Z"
   },
   "files": [
     "README.md",
