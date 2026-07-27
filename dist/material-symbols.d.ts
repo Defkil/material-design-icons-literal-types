@@ -3415,6 +3415,7 @@ export type MaterialSymbols =
 | 'sim_card_alert'
 | 'sim_card_download'
 | 'simulation'
+| 'single_arrow'
 | 'single_bed'
 | 'sip'
 | 'siren'
