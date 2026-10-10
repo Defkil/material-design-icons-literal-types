@@ -25,13 +25,13 @@ yarn add -D material-design-icons-literal-types
 > Import the desired icon type from the package
 
 ```typescript
-import {MaterialSymbols} from 'material-design-icons-literal-types'
+import type {MaterialSymbols} from 'material-design-icons-literal-types'
 
 const mySymbol: MaterialSymbols = 'home'
 ```
 
 ```typescript
-import {MaterialIcons} from 'material-design-icons-literal-types'
+import type {MaterialIcons} from 'material-design-icons-literal-types'
 
 const myIcon: MaterialIcons = 'home'
 ```
@@ -45,9 +45,11 @@ Using these literal types ensures that you are using valid icon names and helps 
 
 ## Updating Icon Types
 
-The icon types are automatically updated every Monday, Wednesday, and Friday at midnight (UTC) through a GitHub Actions
-workflow.
-This ensures that the package stays up to date with the latest icons from the Material Design Icons repository.
+Every Monday, Wednesday, and Friday at midnight (UTC) a GitHub Actions workflow builds the types from the Material Design
+Icons repository and publishes a new patch version to npm if the package differs from the latest release.
+Releases are published with npm trusted publishing and carry a provenance attestation.
+
+`pnpm build` writes the types to `dist/`; `npm pack` and `npm publish` run it automatically.
 
 ## License
 

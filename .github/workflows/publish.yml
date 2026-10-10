@@ -1,0 +1,70 @@
+name: Publish
+
+on:
+  schedule:
+    - cron: '0 0 * * 1,3,5'
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Version bump, applied only if the package differs from the latest release
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+
+permissions: {}
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write # npm trusted publishing (OIDC), no token secret
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: lts/*
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm test
+      - name: Compare with the latest release on npm
+        id: compare
+        run: |
+          # npm holds the release state: pack the package under the latest
+          # released version and diff it against that release.
+          latest="$(npm view material-design-icons-literal-types version)"
+          npm version "$latest" --no-git-tag-version --allow-same-version
+          mkdir -p "$RUNNER_TEMP/released" "$RUNNER_TEMP/local"
+          npm pack "material-design-icons-literal-types@$latest" --pack-destination "$RUNNER_TEMP/released"
+          npm pack --pack-destination "$RUNNER_TEMP/local"
+          tar -xzf "$RUNNER_TEMP"/released/*.tgz -C "$RUNNER_TEMP/released"
+          tar -xzf "$RUNNER_TEMP"/local/*.tgz -C "$RUNNER_TEMP/local"
+          if diff -ru "$RUNNER_TEMP/released/package" "$RUNNER_TEMP/local/package"; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Publish
+        if: steps.compare.outputs.changed == 'true'
+        env:
+          BUMP: ${{ inputs.bump || 'patch' }}
+        run: |
+          npm version "$BUMP" --no-git-tag-version
+          npm publish
+
+  keepalive:
+    # GitHub disables a schedule after 60 days without a commit (it stood
+    # still from April 2025 to January 2026); re-enabling resets that clock.
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - run: gh api -X PUT "repos/$GITHUB_REPOSITORY/actions/workflows/publish.yml/enable"
+        env:
+          GH_TOKEN: ${{ github.token }}

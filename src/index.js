@@ -1,36 +1,21 @@
 const generateTypeFile = require('./lib/generate-type-file')
-const githubGetLastModifiedDate = require('./lib/github-get-last-modified-date')
-const { packageConfigGetLastGenerated, packageConfigSetTimeAndIncrementVersion } = require('./lib/package-config')
 const readDataSource = require('./lib/load-data-source')
 const fs = require('fs')
 
 async function main () {
   const distDir = 'dist'
-  const dataSource = await readDataSource()
-  const lastGenerated = packageConfigGetLastGenerated()
+  await fs.promises.mkdir(distDir, { recursive: true })
 
-  if (!fs.existsSync(distDir)) {
-    await fs.promises.mkdir(distDir)
-  }
-
-  let modified = false
-  for (const { githubPath, outputFile, outputTypeName } of dataSource) {
-    const lastModifiedDate = await githubGetLastModifiedDate(githubPath)
-    if (lastModifiedDate <= lastGenerated) {
-      continue
-    }
+  for (const { githubPath, outputFile, outputTypeName } of await readDataSource()) {
     await generateTypeFile({
       githubPath,
       outputFile: distDir + '/' + outputFile,
       outputTypeName
     })
-    modified = true
-  }
-  if (modified) {
-    packageConfigSetTimeAndIncrementVersion(new Date())
   }
 }
 
 main().catch((error) => {
-  console.error('Error:', error)
+  console.error(error)
+  process.exitCode = 1
 })

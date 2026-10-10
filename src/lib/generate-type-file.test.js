@@ -18,6 +18,7 @@ describe('generateTypeFile', () => {
     const dummyResponse = 'icon1 e000\nicon2 e000\nicon3 e000\n'
     jest.spyOn(https, 'get').mockImplementation((options, callback) => {
       const response = {
+        statusCode: 200,
         on: (event, handler) => {
           if (event === 'data') {
             handler(Buffer.from(dummyResponse))
@@ -50,6 +51,7 @@ describe('generateTypeFile', () => {
 
     jest.spyOn(https, 'get').mockImplementation((url, callback) => {
       const response = {
+        statusCode: 200,
         on: jest.fn()
       }
       callback(response)
@@ -65,6 +67,24 @@ describe('generateTypeFile', () => {
     await expect(generateTypeFile(options)).rejects.toThrow('Download error')
   })
 
+  it('should reject a download that does not return status 200', async () => {
+    const options = {
+      githubPath: 'path/to/icons',
+      outputTypeName: 'IconType',
+      outputFile: 'icons.ts'
+    }
+
+    jest.spyOn(https, 'get').mockImplementation((options, callback) => {
+      const response = { statusCode: 404, resume: jest.fn(), on: jest.fn() }
+      callback(response)
+      return { on: jest.fn() }
+    })
+    const writeFileSpy = jest.spyOn(fs, 'writeFile').mockResolvedValue()
+
+    await expect(generateTypeFile(options)).rejects.toThrow('Download of path/to/icons failed with status code 404')
+    expect(writeFileSpy).not.toHaveBeenCalled()
+  })
+
   it('should throw an error when generated file has unexpected number of lines', async () => {
     const options = {
       githubPath: 'path/to/icons',
@@ -75,6 +95,7 @@ describe('generateTypeFile', () => {
     const dummyResponse = 'icon1 e000\nicon2 e000\n'
     jest.spyOn(https, 'get').mockImplementation((options, callback) => {
       const response = {
+        statusCode: 200,
         on: (event, handler) => {
           if (event === 'data') {
             handler(Buffer.from(dummyResponse))

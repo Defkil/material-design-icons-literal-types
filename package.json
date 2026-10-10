@@ -1,9 +1,10 @@
 {
   "name": "material-design-icons-literal-types",
-  "version": "1.0.65",
-  "description": "",
+  "version": "0.0.0-development",
+  "description": "TypeScript literal types for the Google Material Icons and Material Symbols icon names",
   "scripts": {
-    "start": "node src/index.js",
+    "build": "node src/index.js",
+    "prepack": "npm run build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "jest"
@@ -18,11 +19,11 @@
     "material-icons"
   ],
   "author": "Oliver Grüttner <dev@olivergruettner.de> (https://olis.tech)",
-  "repository": "github:Defkil/material-design-icons-literal-types",
-  "license": "ISC",
-  "config": {
-    "lastGenerated": "2026-10-09T04:05:08.025Z"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Defkil/material-design-icons-literal-types.git"
   },
+  "license": "ISC",
   "files": [
     "README.md",
     "index.d.ts",

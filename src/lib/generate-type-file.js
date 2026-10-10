@@ -30,6 +30,11 @@ async function downloadContent (githubPath) {
   return new Promise((resolve, reject) => {
     let data = ''
     https.get(options, (response) => {
+      if (response.statusCode !== 200) {
+        response.resume()
+        reject(new Error(`Download of ${githubPath} failed with status code ${response.statusCode}`))
+        return
+      }
       response.on('data', (chunk) => { data += chunk })
       response.on('end', () => resolve(data))
     }).on('error', reject)
