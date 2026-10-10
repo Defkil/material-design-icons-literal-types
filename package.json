@@ -4,8 +4,8 @@
   "description": "",
   "scripts": {
     "start": "node src/index.js",
-    "lint": "standard",
-    "lint:fix": "standard --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "test": "jest"
   },
   "keywords": [
@@ -28,13 +28,10 @@
     "index.d.ts",
     "dist"
   ],
-  "standard": {
-    "env": [
-      "jest"
-    ]
-  },
   "devDependencies": {
-    "jest": "^29.7.0",
-    "standard": "^17.1.0"
-  }
+    "eslint": "^10.12.0",
+    "jest": "^30.5.2",
+    "neostandard": "^0.14.0"
+  },
+  "packageManager": "pnpm@12.10.1"
 }
