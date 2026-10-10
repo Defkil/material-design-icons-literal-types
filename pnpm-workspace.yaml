@@ -1,3 +1,7 @@
 allowBuilds:
   '@parcel/watcher': false
   unrs-resolver: false
+overrides:
+  # babel-plugin-istanbul 8.0.0 (via jest 30) still asks for test-exclude ^7 and with it
+  # the deprecated glob 10; test-exclude 8 only raised Node to 20. Drop once it accepts ^8.
+  babel-plugin-istanbul>test-exclude: ^8.0.0
